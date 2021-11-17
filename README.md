@@ -86,19 +86,17 @@ The textures are baked super fast, they are anti-aliased, and they are extremely
    This is affected by changing the `Alpha` socket on the `Principled BSDF` node,
    and it is also affected by the `Blend Mode` settings (`Opaque`, `Alpha Clip`, `Alpha Hashed`, and `Alpha Blend`).
 
-* `AO` bakes an ambient occlusion texture, white meaning no occlusion, and black meaning full occlusion.
+* `AO` bakes an ambient occlusion texture, white means no occlusion, and black means full occlusion.
 
    Ambient occlusion means how close an object is to another object. It is used to add in fake shadows.
 
-* `Curvature` bakes a curvature map, gray means no curvature, white means curving outwards (convex) and black means curving inwards (concave).
+* `Curvature` bakes a curvature map, gray means no curvature, white means curving outwards (convex), and black means curving inwards (concave).
 
    This is often used to add extra detail to the edges of models (scratches, scuffs, or dirt).
 
 * `Normal` bakes a normal map. This is affected by the `Normal` socket on the `Principled BSDF` node.
 
-   This is the most important texture, because it contains all the shapes and details of the model.
-
-* `Height` bakes a height map. Gray means the geometry is at the center (`0z`), white means positive `+z`, and black means negative `-z`.
+* `Height` bakes a height map. Gray means the geometry is at the center `0z`, white means positive `+z`, and black means negative `-z`.
 
    This can be used to create parallax effects to add extra depth, or to create bump maps.
 
