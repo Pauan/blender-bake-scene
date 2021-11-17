@@ -86,11 +86,11 @@ The textures are baked super fast, they are anti-aliased, and they are extremely
    This is affected by changing the `Alpha` socket on the `Principled BSDF` node,
    and it is also affected by the `Blend Mode` settings (`Opaque`, `Alpha Clip`, `Alpha Hashed`, and `Alpha Blend`).
 
-* `AO` bakes an ambient occlusion texture, white means no occlusion, and black means full occlusion.
+* `AO` bakes an ambient occlusion texture. White means no occlusion, and black means full occlusion.
 
    Ambient occlusion means how close an object is to another object. It is used to add in fake shadows.
 
-* `Curvature` bakes a curvature map, gray means no curvature, white means curving outwards (convex), and black means curving inwards (concave).
+* `Curvature` bakes a curvature map. Gray means no curvature, white means curving outwards (convex), and black means curving inwards (concave).
 
    This is often used to add extra detail to the edges of models (scratches, scuffs, or dirt).
 
