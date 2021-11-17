@@ -46,10 +46,13 @@ The textures are baked super fast, they are anti-aliased, and they are extremely
 
 * The textures created by this add-on can be directly used in DECALmachine.
 
-* I recommend baking with 100% Compression. This slows down the baking, but it means much smaller file sizes.
+* I recommend baking with 100% `Compression`. This slows down the baking, but it means much smaller file sizes.
 
-* The origin point `(0x, 0y, 0z)` is always used as the center for the textures. The `Size` option controls how much of your scene it will bake,
-   anything outside of `Size` won't be baked. By default it bakes a `2m x 2m` box centered on the origin.
+* The origin point `(0x, 0y, 0z)` is always used as the center for the textures.
+
+   The `Size` option specifies how big your scene is, anything outside of `Size` won't be baked.
+
+   By default it bakes a `2m x 2m` box centered on the origin.
 
 * If you want the texture files to have a prefix you can simply add it to the `Output` folder:
 
@@ -83,32 +86,32 @@ The textures are baked super fast, they are anti-aliased, and they are extremely
    This is affected by changing the `Alpha` socket on the `Principled BSDF` node,
    and it is also affected by the `Blend Mode` settings (`Opaque`, `Alpha Clip`, `Alpha Hashed`, and `Alpha Blend`).
 
-* `AO` bakes an ambient occlusion texture, with white meaning no occlusion, and black meaning full occlusion.
+* `AO` bakes an ambient occlusion texture, white meaning no occlusion, and black meaning full occlusion.
 
    Ambient occlusion means how close an object is to another object. It is used to add in fake shadows.
 
-* `Curvature` bakes a curvature texture, mid gray means no curvature, white means curving outwards (convex) and black means curving inwards (concave).
+* `Curvature` bakes a curvature map, gray means no curvature, white means curving outwards (convex) and black means curving inwards (concave).
 
-   This is normally used to add extra detail to the edges of models (scratches, scuffs, or dirt).
+   This is often used to add extra detail to the edges of models (scratches, scuffs, or dirt).
 
 * `Normal` bakes a normal map. This is affected by the `Normal` socket on the `Principled BSDF` node.
 
    This is the most important texture, because it contains all the shapes and details of the model.
 
-* `Height` bakes a height map. Mid gray means the geometry is at the center (`0z`), white means positive `z`, and black means negative `z`.
+* `Height` bakes a height map. Gray means the geometry is at the center (`0z`), white means positive `+z`, and black means negative `-z`.
 
    This can be used to create parallax effects to add extra depth, or to create bump maps.
 
-   By default it calculates the min/max bounds automatically based on the vertexes in your scene. But you can instead choose `Manual` mode and
-   then manually change the min/max bounds.
+   By default it calculates the max bounds automatically based on the vertexes in your scene. But you can instead choose `Manual` mode and
+   then manually change the max bounds.
 
-* `Color` bakes the `Base Color` socket on the `Principled BSDF` node.
+* `Color` bakes the `Base Color` socket of the `Principled BSDF` node.
 
-* `Emission` bakes the `Emission` socket on the `Principled BSDF` node.
+* `Emission` bakes the `Emission` socket of the `Principled BSDF` node.
 
-* `Metallic` bakes the `Metallic` socket on the `Principled BSDF` node.
+* `Metallic` bakes the `Metallic` socket of the `Principled BSDF` node.
 
-* `Roughness` bakes the `Roughness` socket on the `Principled BSDF` node.
+* `Roughness` bakes the `Roughness` socket of the `Principled BSDF` node.
 
 * `Object Random` bakes a black-and-white texture where every object is given a random grayscale color.
 
