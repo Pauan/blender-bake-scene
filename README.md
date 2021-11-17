@@ -128,14 +128,14 @@ The textures are baked super fast, they are anti-aliased, and they are extremely
 * `Hair Root` bakes a black-and-white texture where black means the root of the hair, and white means the tip of the hair.
 
 
-[screenshot1]: https://raw.githubusercontent.com/Pauan/blender-bake-scene/master/Screenshot%201.PNG
-[screenshot2]: https://raw.githubusercontent.com/Pauan/blender-bake-scene/master/Screenshot%202.PNG
-[screenshot3]: https://raw.githubusercontent.com/Pauan/blender-bake-scene/master/Screenshot%203.PNG
-[screenshot4]: https://raw.githubusercontent.com/Pauan/blender-bake-scene/master/Screenshot%204.PNG
-[screenshot5]: https://raw.githubusercontent.com/Pauan/blender-bake-scene/master/Screenshot%205.PNG
-[screenshot6]: https://raw.githubusercontent.com/Pauan/blender-bake-scene/master/Screenshot%206.PNG
-[screenshot7]: https://raw.githubusercontent.com/Pauan/blender-bake-scene/master/Screenshot%207.PNG
-[screenshot8]: https://raw.githubusercontent.com/Pauan/blender-bake-scene/master/Screenshot%208.PNG
+[screenshot1]: https://github.com/Pauan/blender-bake-scene/raw/master/Screenshot%201.png
+[screenshot2]: https://github.com/Pauan/blender-bake-scene/raw/master/Screenshot%202.png
+[screenshot3]: https://github.com/Pauan/blender-bake-scene/raw/master/Screenshot%203.png
+[screenshot4]: https://github.com/Pauan/blender-bake-scene/raw/master/Screenshot%204.png
+[screenshot5]: https://github.com/Pauan/blender-bake-scene/raw/master/Screenshot%205.png
+[screenshot6]: https://github.com/Pauan/blender-bake-scene/raw/master/Screenshot%206.png
+[screenshot7]: https://github.com/Pauan/blender-bake-scene/raw/master/Screenshot%207.png
+[screenshot8]: https://github.com/Pauan/blender-bake-scene/raw/master/Screenshot%208.png
 
 
 ## For programmers
