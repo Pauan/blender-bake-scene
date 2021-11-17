@@ -12,13 +12,13 @@ The textures are baked super fast, they are anti-aliased, and they are extremely
 
 ## Installation
 
-1. Go to the [Releases page](https://github.com/Pauan/blender-bake-scene/releases) and download the most recent `Bake Scene.zip` file.
+1. Go to the [Releases page](https://github.com/Pauan/blender-bake-scene/releases) and download the most recent `Bake.Scene.zip` file.
 
 2. In Blender, go to `Edit -> Preferences...`
 
 3. In the `Add-ons` tab, click the `Install...` button.
 
-4. Select the `Bake Scene.zip` file and click `Install Add-on`.
+4. Select the `Bake.Scene.zip` file and click `Install Add-on`.
 
 5. Enable the checkbox to the left of `Render: Bake Scene`.
 
