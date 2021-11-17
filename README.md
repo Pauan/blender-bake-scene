@@ -61,6 +61,14 @@ The textures are baked super fast, they are anti-aliased, and they are extremely
 
    ![][screenshot8]
 
+* If you use a `Principled BSDF` node it will be baked into the textures:
+
+   ![][screenshot9]
+
+   These sockets are supported: `Base Color`, `Metallic`, `Roughness`, `Emission`, `Alpha`, and `Normal`.
+
+   It works with both simple values and also complex procedural node trees.
+
 * If you are baking hair, you should set the `Hair Shape Type` setting to `Strip`:
 
    ![][screenshot6]
@@ -136,6 +144,7 @@ The textures are baked super fast, they are anti-aliased, and they are extremely
 [screenshot6]: https://github.com/Pauan/blender-bake-scene/raw/master/Screenshot%206.png
 [screenshot7]: https://github.com/Pauan/blender-bake-scene/raw/master/Screenshot%207.png
 [screenshot8]: https://github.com/Pauan/blender-bake-scene/raw/master/Screenshot%208.png
+[screenshot9]: https://github.com/Pauan/blender-bake-scene/raw/master/Screenshot%209.png
 
 
 ## For programmers
