@@ -29,6 +29,16 @@ class Scene(bpy.types.PropertyGroup):
     collection: PointerProperty(type=bpy.types.Collection)
     height_bounds: PointerProperty(type=bpy.types.Object)
 
+    camera_height: FloatProperty(
+        name="Camera Height",
+        description="Height of the camera",
+        default=50,
+        min=0,
+        subtype='DISTANCE',
+        unit='LENGTH',
+        options=set(),
+    )
+
     size: FloatProperty(
         name="Size",
         description="Width / height of the scene",

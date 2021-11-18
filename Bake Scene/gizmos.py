@@ -18,7 +18,7 @@
 import bpy
 import mathutils
 
-from .operators import (get_size)
+from .utils import (get_size)
 from .legacy import (remove_root_collection)
 
 
