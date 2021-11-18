@@ -41,7 +41,6 @@ from . import gizmos
 classes = (
     properties.Scene,
     operators.CalculateMaxHeight,
-    operators.UpdateBounds,
     operators.ShowSize,
     operators.HideSize,
     operators.Bake,

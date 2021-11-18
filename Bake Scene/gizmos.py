@@ -18,7 +18,8 @@
 import bpy
 import mathutils
 
-from .operators import get_size
+from .operators import (get_size)
+from .legacy import (remove_root_collection)
 
 
 class BoxGizmo(bpy.types.Gizmo):
@@ -126,6 +127,7 @@ class Gizmos(bpy.types.GizmoGroup):
         plane.use_draw_modal = True
         self.size_guide = plane
 
+        remove_root_collection(context)
         self.update_gizmos(context)
 
     def draw_prepare(self, context):

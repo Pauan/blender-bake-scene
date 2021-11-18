@@ -17,96 +17,9 @@
 
 import time
 import bpy
-import bmesh
 
 
 CAMERA_HEIGHT = 50
-
-
-def make_collection(name, parent):
-    collection = bpy.data.collections.new(name)
-    parent.children.link(collection)
-    return collection
-
-
-def remove_object(object):
-    data = object.data
-
-    bpy.data.objects.remove(object)
-
-    if data is not None:
-        bpy.data.meshes.remove(data)
-
-
-def remove_collection_recursive(collection):
-    for child in collection.objects:
-        remove_object(child)
-
-    for sub in collection.children:
-        remove_collection_recursive(sub)
-
-    assert len(collection.children) == 0 and len(collection.objects) == 0
-
-    bpy.data.collections.remove(collection)
-
-
-def remove_root_collection(data):
-    if data.collection:
-        remove_collection_recursive(data.collection)
-
-    data.collection = None
-    data.height_bounds = None
-
-
-def safe_remove_collection(collection):
-    if len(collection.children) == 0 and len(collection.objects) == 0:
-        bpy.data.collections.remove(collection)
-        return True
-
-    else:
-        return False
-
-
-def set_mesh_cube(mesh, dimensions):
-    bm = bmesh.new()
-    bmesh.ops.create_cube(bm, size=1.0, calc_uvs=False)
-    bmesh.ops.scale(bm, vec=dimensions, verts=bm.verts)
-    bm.to_mesh(mesh)
-    bm.free()
-
-
-def set_mesh_plane(mesh, dimensions):
-    bm = bmesh.new()
-    # This creates a 1m x 1m plane
-    bmesh.ops.create_grid(bm, x_segments=1, y_segments=1, size=0.5, calc_uvs=False)
-    bmesh.ops.scale(bm, vec=dimensions, verts=bm.verts)
-    bm.to_mesh(mesh)
-    bm.free()
-
-
-def make_mesh_object(name, collection):
-    mesh = bpy.data.meshes.new(name=name)
-    cube = bpy.data.objects.new(name, mesh)
-    collection.objects.link(cube)
-    return cube
-
-
-def make_bounds_object(name, collection):
-    obj = make_mesh_object(name, collection)
-    obj.display_type = 'BOUNDS'
-    obj.show_in_front = True
-    obj.hide_select = True
-    obj.hide_render = True
-
-    # This causes it to be transparent when using Cycles in the viewport
-    obj.cycles_visibility.camera = False
-    obj.cycles_visibility.diffuse = False
-    obj.cycles_visibility.glossy = False
-    obj.cycles_visibility.transmission = False
-    obj.cycles_visibility.scatter = False
-    obj.cycles_visibility.shadow = False
-
-    return obj
 
 
 def renderable_objects(layer):
@@ -889,59 +802,6 @@ class CalculateMaxHeight(bpy.types.Operator):
             self.report({'ERROR'}, "Objects are outside of baking range (" + str(CAMERA_HEIGHT) + "m)")
         else:
             data.max_height = max_height
-
-        return {'FINISHED'}
-
-
-class UpdateBounds(bpy.types.Operator):
-    bl_idname = "bake_scene.update_bounds"
-    bl_label = "Update bounds"
-    bl_options = {'REGISTER', 'UNDO', 'INTERNAL'}
-
-    def make_collection(self, context, data):
-        if not data.collection:
-            data.collection = make_collection("[Bake Scene]", context.scene.collection)
-
-        data.collection.color_tag = 'COLOR_01' # Red
-        data.collection.hide_select = True
-        data.collection.hide_render = True
-
-    def update_size(self, context, data):
-        if data.show_size and False:
-            self.make_collection(context, data)
-
-            if not data.size_bounds:
-                data.size_bounds = make_bounds_object("[Bake Scene] Size Bounds", data.collection)
-
-            set_mesh_plane(data.size_bounds.data, (data.size, data.size, 1))
-
-        elif data.size_bounds:
-            remove_object(data.size_bounds)
-            data.size_bounds = None
-
-    def update_height(self, context, data):
-        if data.generate_height and data.height_mode == 'MANUAL' and False:
-            self.make_collection(context, data)
-
-            if not data.height_bounds:
-                data.height_bounds = make_bounds_object("[Bake Scene] Height Bounds", data.collection)
-
-            set_mesh_cube(data.height_bounds.data, (data.size, data.size, data.max_height * 2))
-
-        elif data.height_bounds:
-            remove_object(data.height_bounds)
-            data.height_bounds = None
-
-    def execute(self, context):
-        return {'FINISHED'}
-        data = context.scene.bake_scene
-
-        self.update_size(context, data)
-        self.update_height(context, data)
-
-        # This cleans up the collection if it doesn't have any objects inside of it
-        if data.collection and safe_remove_collection(data.collection):
-            data.collection = None
 
         return {'FINISHED'}
 

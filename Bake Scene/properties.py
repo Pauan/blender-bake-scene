@@ -16,31 +16,16 @@
 # along with Bake Scene.  If not, see <https://www.gnu.org/licenses/>.
 
 import bpy
-from bpy.props import (IntProperty, FloatProperty, PointerProperty, EnumProperty, StringProperty, BoolProperty, PointerProperty)
+from bpy.props import (IntProperty, FloatProperty, PointerProperty, EnumProperty, BoolProperty)
 
 
-def next_tick():
-    bpy.ops.bake_scene.update_bounds()
-
-
-def mark_dirty():
-    if not bpy.app.timers.is_registered(next_tick):
-        bpy.app.timers.register(next_tick)
-
-
-def update_max_height(self, context):
-    if self.height_mode == 'MANUAL':
-        mark_dirty()
-
-
-def update_bounds(self, context):
-    mark_dirty()
-
+# This causes the gizmo to update when the property is changed
 def update_noop(self, context):
     pass
 
 
 class Scene(bpy.types.PropertyGroup):
+    # TODO deprecate and remove these
     collection: PointerProperty(type=bpy.types.Collection)
     height_bounds: PointerProperty(type=bpy.types.Object)
 
@@ -54,7 +39,7 @@ class Scene(bpy.types.PropertyGroup):
         subtype='DISTANCE',
         unit='LENGTH',
         options=set(),
-        update=update_bounds,
+        update=update_noop,
     )
 
     show_size: BoolProperty(
@@ -68,7 +53,7 @@ class Scene(bpy.types.PropertyGroup):
     height_mode: EnumProperty(
         name="Mode",
         description="Calculate max height automatically or manually",
-        update=update_bounds,
+        update=update_noop,
         options=set(),
         items=(('AUTO', "Auto", ""),
                ('MANUAL', "Manual", ""))
@@ -84,7 +69,7 @@ class Scene(bpy.types.PropertyGroup):
         subtype='DISTANCE',
         unit='LENGTH',
         options=set(),
-        update=update_bounds,
+        update=update_noop,
     )
 
     generate_alpha: BoolProperty(
@@ -141,7 +126,7 @@ class Scene(bpy.types.PropertyGroup):
         description="Generate height texture",
         default=True,
         options=set(),
-        update=update_bounds,
+        update=update_noop,
     )
 
     generate_metallic: BoolProperty(
@@ -212,7 +197,4 @@ class Scene(bpy.types.PropertyGroup):
 
     @classmethod
     def unregister(cls):
-        if bpy.app.timers.is_registered(next_tick):
-            bpy.app.timers.unregister(next_tick)
-
         del bpy.types.Scene.bake_scene
