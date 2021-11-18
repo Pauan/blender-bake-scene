@@ -193,5 +193,11 @@ class BakePanel(bpy.types.Panel):
 
         flow.separator()
 
-        col = flow.column()
-        col.prop(data, "size")
+        row = flow.row()
+
+        row.prop(data, "size")
+
+        if data.show_size:
+            row.operator("bake_scene.hide_size", text="", icon='HIDE_OFF')
+        else:
+            row.operator("bake_scene.show_size", text="", icon='HIDE_ON')

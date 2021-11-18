@@ -6,6 +6,7 @@ This add-on bakes your scene to textures. This is useful in many situations:
 * Creating decals
 * Creating hair cards
 * Creating skyboxes
+* Creating terrain
 
 The textures are baked super fast, they are anti-aliased, and they are extremely high quality.
 
@@ -83,7 +84,7 @@ The textures are baked super fast, they are anti-aliased, and they are extremely
 
 * `Alpha` bakes a black-and-white alpha / opacity / transparency texture.
 
-   This is affected by changing the `Alpha` socket on the `Principled BSDF` node,
+   This is affected by changing the `Alpha` socket of the `Principled BSDF` node,
    and it is also affected by the `Blend Mode` settings (`Opaque`, `Alpha Clip`, `Alpha Hashed`, and `Alpha Blend`).
 
 * `AO` bakes an ambient occlusion texture. White means no occlusion, and black means full occlusion.
@@ -94,7 +95,7 @@ The textures are baked super fast, they are anti-aliased, and they are extremely
 
    This is often used to add extra detail to the edges of models (scratches, scuffs, or dirt).
 
-* `Normal` bakes a normal map. This is affected by the `Normal` socket on the `Principled BSDF` node.
+* `Normal` bakes a normal map. This is affected by the `Normal` socket of the `Principled BSDF` node.
 
 * `Height` bakes a height map. Gray means the geometry is at the center `0z`, white means positive `+z`, and black means negative `-z`.
 

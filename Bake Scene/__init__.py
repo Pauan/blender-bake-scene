@@ -36,11 +36,14 @@ import bpy
 from . import properties
 from . import ui
 from . import operators
+from . import gizmos
 
 classes = (
     properties.Scene,
     operators.CalculateMaxHeight,
-    operators.UpdateHeightBounds,
+    operators.UpdateBounds,
+    operators.ShowSize,
+    operators.HideSize,
     operators.Bake,
     ui.BakePanel,
     ui.TexturesPanel,
@@ -48,6 +51,9 @@ classes = (
     ui.TexturesMaterialPanel,
     ui.TexturesMaskingPanel,
     ui.TexturesHairPanel,
+    gizmos.BoxGizmo,
+    gizmos.PlaneGizmo,
+    gizmos.Gizmos,
 )
 
 def register():

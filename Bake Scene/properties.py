@@ -17,11 +17,10 @@
 
 import bpy
 from bpy.props import (IntProperty, FloatProperty, PointerProperty, EnumProperty, StringProperty, BoolProperty, PointerProperty)
-from .operators import (remove_root_collection)
 
 
 def next_tick():
-    bpy.ops.bake_scene.update_height_bounds()
+    bpy.ops.bake_scene.update_bounds()
 
 
 def mark_dirty():
@@ -34,8 +33,11 @@ def update_max_height(self, context):
         mark_dirty()
 
 
-def update_height_mode(self, context):
+def update_bounds(self, context):
     mark_dirty()
+
+def update_noop(self, context):
+    pass
 
 
 class Scene(bpy.types.PropertyGroup):
@@ -52,13 +54,21 @@ class Scene(bpy.types.PropertyGroup):
         subtype='DISTANCE',
         unit='LENGTH',
         options=set(),
-        update=update_max_height,
+        update=update_bounds,
+    )
+
+    show_size: BoolProperty(
+        name="Show Size",
+        description="Whether the size is visible or not",
+        default=False,
+        options=set(),
+        update=update_noop,
     )
 
     height_mode: EnumProperty(
         name="Mode",
         description="Calculate max height automatically or manually",
-        update=update_height_mode,
+        update=update_bounds,
         options=set(),
         items=(('AUTO', "Auto", ""),
                ('MANUAL', "Manual", ""))
@@ -74,7 +84,7 @@ class Scene(bpy.types.PropertyGroup):
         subtype='DISTANCE',
         unit='LENGTH',
         options=set(),
-        update=update_max_height,
+        update=update_bounds,
     )
 
     generate_alpha: BoolProperty(
@@ -131,7 +141,7 @@ class Scene(bpy.types.PropertyGroup):
         description="Generate height texture",
         default=True,
         options=set(),
-        update=update_height_mode,
+        update=update_bounds,
     )
 
     generate_metallic: BoolProperty(
