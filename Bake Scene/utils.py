@@ -16,6 +16,7 @@
 # along with Bake Scene.  If not, see <https://www.gnu.org/licenses/>.
 
 import bpy
+from mathutils import (Vector)
 
 
 def renderable_objects(layer):
@@ -40,6 +41,23 @@ def get_size(context, data):
         return (data.size, data.size * (res_y / res_x))
 
 
+def object_vertices(obj):
+    matrix = obj.matrix_world
+
+    # TODO handle particle hair
+    if obj.data and obj.type == 'MESH':
+        # TODO it should do a bounding box test first to avoid this expensive iteration
+        for v in obj.data.vertices:
+            # Convert to global space
+            yield matrix @ v.co
+
+    else:
+        # TODO instead of using the vertices, it should instead do a box intersection test
+        for a in obj.bound_box:
+            # Convert to global space
+            yield matrix @ Vector(a)
+
+
 def calculate_max_height(context, data):
     size = get_size(context, data)
     half_width = size[0] / 2
@@ -50,28 +68,22 @@ def calculate_max_height(context, data):
     max_height = 0
 
     for obj in renderable_objects(context.view_layer.layer_collection):
-        if obj.data and obj.type == 'MESH':
-            matrix = obj.matrix_world
+        for co in object_vertices(obj):
+            # If the vertex is within the size bounds
+            if (
+                co.x <= half_width and
+                co.x >= -half_width and
+                co.y <= half_height and
+                co.y >= -half_height
+            ):
+                height = abs(co.z)
 
-            for v in obj.data.vertices:
-                # Convert to global space
-                co = matrix @ v.co
+                # Abort if the vertex is outside of the camera frustrum
+                if height > camera_height:
+                    return None
 
-                # If the vertex is within the size bounds
-                if (
-                    co.x <= half_width and
-                    co.x >= -half_width and
-                    co.y <= half_height and
-                    co.y >= -half_height
-                ):
-                    height = abs(co.z)
-
-                    # Abort if the vertex is outside of the camera frustrum
-                    if height > camera_height:
-                        return None
-
-                    if height > max_height:
-                        max_height = height
+                if height > max_height:
+                    max_height = height
 
     return max_height
 

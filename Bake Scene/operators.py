@@ -22,7 +22,12 @@ from . import bakers
 from .utils import (calculate_max_height, default_settings, AddEmptyMaterial, Camera, Settings)
 
 
-class CalculateMaxHeight(bpy.types.Operator):
+class HeightOperator:
+    def height_error(self, data):
+        self.report({'ERROR'}, "Objects are outside of baking range (" + str(round(data.camera_height)) + "m)")
+
+
+class CalculateMaxHeight(bpy.types.Operator, HeightOperator):
     bl_idname = "bake_scene.calculate_max_height"
     bl_label = "Calculate max height"
     bl_description = "Sets the max height using the same algorithm as the Auto mode"
@@ -34,7 +39,7 @@ class CalculateMaxHeight(bpy.types.Operator):
         max_height = calculate_max_height(context, data)
 
         if max_height is None:
-            self.report({'ERROR'}, "Objects are outside of baking range (" + str(data.camera_height) + "m)")
+            self.height_error(data)
         else:
             data.max_height = max_height
 
@@ -65,7 +70,7 @@ class HideSize(bpy.types.Operator):
         return {'FINISHED'}
 
 
-class Bake(bpy.types.Operator):
+class Bake(bpy.types.Operator, HeightOperator):
     bl_idname = "bake_scene.bake"
     bl_label = "Bake"
     bl_description = "Bake scene"
@@ -78,10 +83,11 @@ class Bake(bpy.types.Operator):
 
         if data.generate_height:
             if data.height_mode == 'AUTO':
+                # TODO maybe it should always do this check, in order to check for out of camera bounds
                 max_height = calculate_max_height(context, data)
 
                 if max_height is None:
-                    self.report({'ERROR'}, "Objects are outside of baking range (" + str(data.camera_height) + "m)")
+                    self.height_error(data)
                     return {'FINISHED'}
 
             elif data.height_mode == 'MANUAL':
