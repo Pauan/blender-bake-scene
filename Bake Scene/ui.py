@@ -92,6 +92,9 @@ class TexturesMaterialPanel(bpy.types.Panel):
         col = flow.column()
         col.prop(data, "generate_roughness")
 
+        col = flow.column()
+        col.prop(data, "generate_vertex_color")
+
 
 class TexturesMaskingPanel(bpy.types.Panel):
     bl_idname = "DATA_PT_bake_scene_textures_masking"

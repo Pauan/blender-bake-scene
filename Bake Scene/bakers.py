@@ -285,6 +285,31 @@ def bake_emission(data, context, settings):
     render_with_input(context, "__Bake_Emission", "Emission")
 
 
+# TODO output RGBA instead of RGB
+def bake_vertex_color(data, context, settings):
+    antialias_on(context)
+
+    context.scene.render.filepath = filename(data, settings, "vertex_color")
+    context.scene.render.image_settings.color_mode = 'RGB'
+    context.scene.render.engine = 'BLENDER_EEVEE'
+    view_transform_color(context)
+    context.scene.world.color = (0, 0, 0)
+    context.scene.eevee.use_gtao = False
+    context.scene.eevee.use_overscan = False
+
+    with NodeGroup("__Bake_Vertex_Color") as tree:
+        inputs = tree.nodes.new('NodeGroupInput')
+        vertex_color = tree.nodes.new('ShaderNodeVertexColor')
+        emission = tree.nodes.new('ShaderNodeEmission')
+
+        tree.links.new(vertex_color.outputs["Color"], emission.inputs["Color"])
+
+        node_group_output(tree, inputs, emission.outputs["Emission"])
+
+        with ReplaceMaterials(context, "__Bake_Vertex_Color"):
+            bpy.ops.render.render(write_still=True)
+
+
 def bake_alpha(data, context, settings):
     antialias_on(context)
 

@@ -201,6 +201,13 @@ class Scene(bpy.types.PropertyGroup):
         options=set(),
     )
 
+    generate_vertex_color: BoolProperty(
+        name="Vertex Color",
+        description="Generate vertex color texture",
+        default=False,
+        options=set(),
+    )
+
     @classmethod
     def register(cls):
         bpy.types.Scene.bake_scene = PointerProperty(type=cls)

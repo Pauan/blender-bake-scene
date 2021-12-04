@@ -127,6 +127,9 @@ class Bake(bpy.types.Operator, HeightOperator):
             if data.generate_roughness:
                 baking.append(lambda: bakers.bake_roughness(data, context, settings))
 
+            if data.generate_vertex_color:
+                baking.append(lambda: bakers.bake_vertex_color(data, context, settings))
+
             # Masking
             if data.generate_material_index:
                 baking.append(lambda: bakers.bake_material_index(data, context, settings))
