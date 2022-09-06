@@ -18,7 +18,7 @@
 import bpy
 
 from .utils import (
-    antialias_on, view_transform_raw, view_transform_color, filename,
+    antialias_on, antialias_off, view_transform_raw, view_transform_color, filename,
     node_group_output, render_with_input, NodeGroup, ReplaceMaterials,
     CompositorNodeGroup,
 )
@@ -41,23 +41,26 @@ def bake_normal(data, context, settings):
         normalize = tree.nodes.new('ShaderNodeVectorMath')
         normalize.operation = 'NORMALIZE'
 
-        multiply = tree.nodes.new('ShaderNodeVectorMath')
-        multiply.operation = 'MULTIPLY'
-        multiply.inputs[1].default_value[0] = 0.5
-        multiply.inputs[1].default_value[1] = 0.5
-        multiply.inputs[1].default_value[2] = 0.5
+        transform = tree.nodes.new('ShaderNodeVectorTransform')
+        transform.vector_type = 'NORMAL'
+        transform.convert_from = 'WORLD'
+        transform.convert_to = 'CAMERA'
 
-        add = tree.nodes.new('ShaderNodeVectorMath')
-        add.inputs[1].default_value[0] = 0.5
-        add.inputs[1].default_value[1] = 0.5
-        add.inputs[1].default_value[2] = 0.5
+        math = tree.nodes.new('ShaderNodeVectorMath')
+        math.operation = 'MULTIPLY_ADD'
+        math.inputs[1].default_value[0] = 0.5
+        math.inputs[1].default_value[1] = 0.5
+        math.inputs[1].default_value[2] = -0.5
+        math.inputs[2].default_value[0] = 0.5
+        math.inputs[2].default_value[1] = 0.5
+        math.inputs[2].default_value[2] = 0.5
 
         emission = tree.nodes.new('ShaderNodeEmission')
 
         tree.links.new(inputs.outputs["Normal"], normalize.inputs["Vector"])
-        tree.links.new(normalize.outputs["Vector"], multiply.inputs["Vector"])
-        tree.links.new(multiply.outputs["Vector"], add.inputs["Vector"])
-        tree.links.new(add.outputs["Vector"], emission.inputs["Color"])
+        tree.links.new(normalize.outputs["Normal"], transform.inputs["Vector"])
+        tree.links.new(transform.outputs["Vector"], math.inputs["Vector"])
+        tree.links.new(math.outputs["Vector"], emission.inputs["Color"])
 
         node_group_output(tree, inputs, emission.outputs["Emission"])
 
@@ -416,7 +419,7 @@ def bake_hair_random(data, context, settings):
 
 
 def bake_hair_root(data, context, settings):
-    antialias_on(context)
+    antialias_off(context)
 
     context.scene.render.filepath = filename(data, settings, "hair_root")
     context.scene.render.image_settings.color_mode = 'BW'
