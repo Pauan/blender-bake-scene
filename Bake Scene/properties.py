@@ -93,6 +93,13 @@ class Scene(bpy.types.PropertyGroup):
         update=update_noop,
     )
 
+    generate_render: BoolProperty(
+        name="Render",
+        description="Generate final render texture",
+        default=True,
+        options=set(),
+    )
+
     generate_alpha: BoolProperty(
         name="Alpha",
         description="Generate alpha texture",

@@ -19,12 +19,18 @@ import bpy
 
 from .utils import (
     antialias_on, antialias_off, view_transform_raw, view_transform_color, filename,
-    render_engine, node_group_output, render_with_input, NodeGroup, ReplaceMaterials,
-    CompositorNodeGroup,
+    default_settings, render_engine, node_group_output, render_with_input, NodeGroup,
+    ReplaceMaterials, CompositorNodeGroup,
 )
 
 
+def bake_render(data, context, settings):
+    context.scene.render.filepath = filename(data, settings, "render")
+    bpy.ops.render.render(write_still=True)
+
+
 def bake_normal(data, context, settings):
+    default_settings(context)
     antialias_on(context)
 
     context.scene.render.filepath = filename(data, settings, "normal")
@@ -69,6 +75,7 @@ def bake_normal(data, context, settings):
 
 
 def bake_ao(data, context, settings):
+    default_settings(context)
     antialias_on(context)
 
     context.scene.render.filepath = filename(data, settings, "ao")
@@ -104,6 +111,7 @@ def bake_ao(data, context, settings):
 
 
 def bake_curvature(data, context, settings):
+    default_settings(context)
     antialias_on(context)
 
     context.scene.render.filepath = filename(data, settings, "curvature")
@@ -200,6 +208,7 @@ def bake_curvature(data, context, settings):
 
 
 def bake_height(data, context, settings, max_height):
+    default_settings(context)
     antialias_on(context)
 
     context.scene.render.filepath = filename(data, settings, "height")
@@ -233,6 +242,7 @@ def bake_height(data, context, settings, max_height):
 
 # TODO output RGBA instead of RGB
 def bake_color(data, context, settings):
+    default_settings(context)
     antialias_on(context)
 
     context.scene.render.filepath = filename(data, settings, "color")
@@ -247,6 +257,7 @@ def bake_color(data, context, settings):
 
 
 def bake_metallic(data, context, settings):
+    default_settings(context)
     antialias_on(context)
 
     context.scene.render.filepath = filename(data, settings, "metallic")
@@ -261,6 +272,7 @@ def bake_metallic(data, context, settings):
 
 
 def bake_roughness(data, context, settings):
+    default_settings(context)
     antialias_on(context)
 
     context.scene.render.filepath = filename(data, settings, "roughness")
@@ -275,6 +287,7 @@ def bake_roughness(data, context, settings):
 
 
 def bake_emission(data, context, settings):
+    default_settings(context)
     antialias_on(context)
 
     context.scene.render.filepath = filename(data, settings, "emission")
@@ -290,6 +303,7 @@ def bake_emission(data, context, settings):
 
 # TODO output RGBA instead of RGB
 def bake_vertex_color(data, context, settings):
+    default_settings(context)
     antialias_on(context)
 
     context.scene.render.filepath = filename(data, settings, "vertex_color")
@@ -314,6 +328,7 @@ def bake_vertex_color(data, context, settings):
 
 
 def bake_alpha(data, context, settings):
+    default_settings(context)
     antialias_on(context)
 
     context.scene.render.filepath = filename(data, settings, "alpha")
@@ -335,6 +350,7 @@ def bake_alpha(data, context, settings):
 
 
 def bake_material_index(data, context, settings):
+    default_settings(context)
     antialias_on(context)
 
     context.scene.render.filepath = filename(data, settings, "material_index")
@@ -365,6 +381,7 @@ def bake_material_index(data, context, settings):
 
 
 def bake_object_index(data, context, settings):
+    default_settings(context)
     antialias_on(context)
 
     context.scene.render.filepath = filename(data, settings, "object_index")
@@ -395,6 +412,7 @@ def bake_object_index(data, context, settings):
 
 
 def bake_hair_random(data, context, settings):
+    default_settings(context)
     antialias_on(context)
 
     context.scene.render.filepath = filename(data, settings, "hair_random")
@@ -419,6 +437,7 @@ def bake_hair_random(data, context, settings):
 
 
 def bake_hair_root(data, context, settings):
+    default_settings(context)
     antialias_off(context)
 
     context.scene.render.filepath = filename(data, settings, "hair_root")
@@ -443,6 +462,7 @@ def bake_hair_root(data, context, settings):
 
 
 def bake_object_random(data, context, settings):
+    default_settings(context)
     antialias_on(context)
 
     context.scene.render.filepath = filename(data, settings, "object_random")

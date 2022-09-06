@@ -95,8 +95,6 @@ class Bake(bpy.types.Operator, HeightOperator):
                 max_height = data.max_height
 
         with Settings(context) as settings, Camera(context) as camera, AddEmptyMaterial(context):
-            default_settings(context)
-
             if data.camera_mode == 'TOP':
                 camera.data.type = 'ORTHO'
                 camera.data.ortho_scale = data.size
@@ -110,6 +108,10 @@ class Bake(bpy.types.Operator, HeightOperator):
                 camera.rotation_euler = (radians(90.0), 0.0, 0.0)
 
             baking = []
+
+            # This must come first, because it must bake with the user's settings
+            if data.generate_render:
+                baking.append(lambda: bakers.bake_render(data, context, settings))
 
             # Geometry
             if data.generate_alpha:
