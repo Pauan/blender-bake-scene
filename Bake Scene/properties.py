@@ -29,6 +29,16 @@ class Scene(bpy.types.PropertyGroup):
     collection: PointerProperty(type=bpy.types.Collection)
     height_bounds: PointerProperty(type=bpy.types.Object)
 
+    camera_mode: EnumProperty(
+        name="Camera",
+        description="Camera mode for baking",
+        default='TOP',
+        #update=update_noop,
+        options=set(),
+        items=(('TOP', "Top-down", ""),
+               ('HDRI', "HDRI", ""))
+    )
+
     camera_height: FloatProperty(
         name="Camera Height",
         description="Height of the camera",
@@ -63,6 +73,7 @@ class Scene(bpy.types.PropertyGroup):
     height_mode: EnumProperty(
         name="Mode",
         description="Calculate max height automatically or manually",
+        default='AUTO',
         update=update_noop,
         options=set(),
         items=(('AUTO', "Auto", ""),

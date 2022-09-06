@@ -197,10 +197,13 @@ class BakePanel(bpy.types.Panel):
         flow.separator()
 
         row = flow.row()
+        row.prop(data, "camera_mode")
 
-        row.prop(data, "size")
+        if data.camera_mode == 'TOP':
+            row = flow.row()
+            row.prop(data, "size")
 
-        if data.show_size:
-            row.operator("bake_scene.hide_size", text="", icon='HIDE_OFF')
-        else:
-            row.operator("bake_scene.show_size", text="", icon='HIDE_ON')
+            if data.show_size:
+                row.operator("bake_scene.hide_size", text="", icon='HIDE_OFF')
+            else:
+                row.operator("bake_scene.show_size", text="", icon='HIDE_ON')

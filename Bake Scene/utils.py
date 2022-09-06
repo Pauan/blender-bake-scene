@@ -107,7 +107,11 @@ def view_transform_color(context):
 
 
 def render_engine(context, data):
-    context.scene.render.engine = 'BLENDER_EEVEE'
+    if data.camera_mode == 'TOP':
+        context.scene.render.engine = 'BLENDER_EEVEE'
+
+    elif data.camera_mode == 'HDRI':
+        context.scene.render.engine = 'CYCLES'
 
 
 def default_settings(context):
@@ -394,10 +398,8 @@ class ReplaceMaterials:
 
 # Creates a camera and automatically removes it
 class Camera:
-    def __init__(self, context, height, size):
+    def __init__(self, context):
         self.scene = context.scene
-        self.height = height
-        self.size = size
         self.old_camera = None
         self.camera = None
 
@@ -405,20 +407,16 @@ class Camera:
         name = "[Bake Scene] Camera"
         data = bpy.data.cameras.new(name)
 
-        data.type = 'ORTHO'
-        data.ortho_scale = self.size
-        data.clip_end = self.height * 2
-
         self.camera = bpy.data.objects.new(name, data)
         self.scene.collection.objects.link(self.camera)
 
-        self.camera.location = (0, 0, self.height)
         self.camera.hide_render = True
         self.camera.hide_select = True
         self.camera.hide_viewport = True
 
         self.old_camera = self.scene.camera
         self.scene.camera = self.camera
+        return self.camera
 
     def __exit__(self, exc_type, exc_value, traceback):
         data = self.camera.data

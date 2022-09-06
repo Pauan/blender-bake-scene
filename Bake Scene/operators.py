@@ -17,6 +17,7 @@
 
 import time
 import bpy
+from math import radians
 
 from . import bakers
 from .utils import (calculate_max_height, default_settings, AddEmptyMaterial, Camera, Settings)
@@ -93,8 +94,20 @@ class Bake(bpy.types.Operator, HeightOperator):
             elif data.height_mode == 'MANUAL':
                 max_height = data.max_height
 
-        with Settings(context) as settings, Camera(context, data.camera_height, data.size), AddEmptyMaterial(context):
+        with Settings(context) as settings, Camera(context) as camera, AddEmptyMaterial(context):
             default_settings(context)
+
+            if data.camera_mode == 'TOP':
+                camera.data.type = 'ORTHO'
+                camera.data.ortho_scale = data.size
+                camera.data.clip_end = data.camera_height * 2
+                camera.location = (0.0, 0.0, data.camera_height)
+
+            elif data.camera_mode == 'HDRI':
+                camera.data.type = 'PANO'
+                camera.data.cycles.panorama_type = 'EQUIRECTANGULAR'
+                camera.location = (0.0, 0.0, 0.0)
+                camera.rotation_euler = (radians(90.0), 0.0, 0.0)
 
             baking = []
 

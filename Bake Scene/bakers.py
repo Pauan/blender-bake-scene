@@ -19,7 +19,7 @@ import bpy
 
 from .utils import (
     antialias_on, antialias_off, view_transform_raw, view_transform_color, filename,
-    node_group_output, render_with_input, NodeGroup, ReplaceMaterials,
+    render_engine, node_group_output, render_with_input, NodeGroup, ReplaceMaterials,
     CompositorNodeGroup,
 )
 
@@ -58,7 +58,7 @@ def bake_normal(data, context, settings):
         emission = tree.nodes.new('ShaderNodeEmission')
 
         tree.links.new(inputs.outputs["Normal"], normalize.inputs["Vector"])
-        tree.links.new(normalize.outputs["Normal"], transform.inputs["Vector"])
+        tree.links.new(normalize.outputs["Vector"], transform.inputs["Vector"])
         tree.links.new(transform.outputs["Vector"], math.inputs["Vector"])
         tree.links.new(math.outputs["Vector"], emission.inputs["Color"])
 
