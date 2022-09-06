@@ -33,7 +33,7 @@ class Scene(bpy.types.PropertyGroup):
         name="Camera",
         description="Camera mode for baking",
         default='TOP',
-        #update=update_noop,
+        update=update_noop,
         options=set(),
         items=(('TOP', "Top-down", ""),
                ('HDRI', "HDRI", ""))
@@ -93,10 +93,33 @@ class Scene(bpy.types.PropertyGroup):
         update=update_noop,
     )
 
+    depth_mode: EnumProperty(
+        name="Mode",
+        description="Calculate max depth automatically or manually",
+        default='AUTO',
+        update=update_noop,
+        options=set(),
+        items=(('AUTO', "Auto", ""),
+               ('MANUAL', "Manual", ""))
+    )
+
+    max_depth: FloatProperty(
+        name="Max",
+        description="Maximum depth for depth texture",
+        default=1,
+        min=0,
+        step=1,
+        precision=5,
+        subtype='DISTANCE',
+        unit='LENGTH',
+        options=set(),
+        update=update_noop,
+    )
+
     generate_render: BoolProperty(
         name="Render",
-        description="Generate final render texture",
-        default=True,
+        description="Generate final render texture for scene",
+        default=False,
         options=set(),
     )
 
@@ -152,6 +175,14 @@ class Scene(bpy.types.PropertyGroup):
     generate_height: BoolProperty(
         name="Height",
         description="Generate height texture",
+        default=True,
+        options=set(),
+        update=update_noop,
+    )
+
+    generate_depth: BoolProperty(
+        name="Depth",
+        description="Generate depth texture",
         default=True,
         options=set(),
         update=update_noop,

@@ -41,17 +41,20 @@ from . import gizmos
 classes = (
     properties.Scene,
     operators.CalculateMaxHeight,
+    operators.CalculateMaxDepth,
     operators.ShowSize,
     operators.HideSize,
     operators.Bake,
     ui.BakePanel,
     ui.TexturesPanel,
+    ui.TexturesScenePanel,
     ui.TexturesGeometryPanel,
     ui.TexturesMaterialPanel,
     ui.TexturesMaskingPanel,
     ui.TexturesHairPanel,
     gizmos.BoxGizmo,
     gizmos.PlaneGizmo,
+    gizmos.SphereGizmo,
     gizmos.Gizmos,
 )
 

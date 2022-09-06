@@ -20,7 +20,7 @@ import bpy
 from math import radians
 
 from . import bakers
-from .utils import (calculate_max_height, default_settings, AddEmptyMaterial, Camera, Settings)
+from .utils import (calculate_max_height, calculate_max_depth, default_settings, AddEmptyMaterial, Camera, Settings)
 
 
 class HeightOperator:
@@ -43,6 +43,20 @@ class CalculateMaxHeight(bpy.types.Operator, HeightOperator):
             self.height_error(data)
         else:
             data.max_height = max_height
+
+        return {'FINISHED'}
+
+
+class CalculateMaxDepth(bpy.types.Operator):
+    bl_idname = "bake_scene.calculate_max_depth"
+    bl_label = "Calculate max depth"
+    bl_description = "Sets the max depth using the same algorithm as the Auto mode"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        data = context.scene.bake_scene
+
+        data.max_depth = calculate_max_depth(context)
 
         return {'FINISHED'}
 
@@ -81,8 +95,9 @@ class Bake(bpy.types.Operator, HeightOperator):
         data = context.scene.bake_scene
 
         max_height = 0
+        max_depth = 0
 
-        if data.generate_height:
+        if data.generate_height and data.camera_mode == 'TOP':
             if data.height_mode == 'AUTO':
                 # TODO maybe it should always do this check, in order to check for out of camera bounds
                 max_height = calculate_max_height(context, data)
@@ -93,6 +108,15 @@ class Bake(bpy.types.Operator, HeightOperator):
 
             elif data.height_mode == 'MANUAL':
                 max_height = data.max_height
+
+
+        if data.generate_depth and data.camera_mode == 'HDRI':
+            if data.depth_mode == 'AUTO':
+                max_depth = calculate_max_depth(context)
+
+            elif data.depth_mode == 'MANUAL':
+                max_depth = data.max_depth
+
 
         with Settings(context) as settings, Camera(context) as camera, AddEmptyMaterial(context):
             if data.camera_mode == 'TOP':
@@ -123,8 +147,11 @@ class Bake(bpy.types.Operator, HeightOperator):
             if data.generate_curvature:
                 baking.append(lambda: bakers.bake_curvature(data, context, settings))
 
-            if data.generate_height:
+            if data.generate_height and data.camera_mode == 'TOP':
                 baking.append(lambda: bakers.bake_height(data, context, settings, max_height))
+
+            if data.generate_depth and data.camera_mode == 'HDRI':
+                baking.append(lambda: bakers.bake_depth(data, context, settings, max_depth))
 
             if data.generate_normal:
                 baking.append(lambda: bakers.bake_normal(data, context, settings))

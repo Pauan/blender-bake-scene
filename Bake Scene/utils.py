@@ -16,6 +16,7 @@
 # along with Bake Scene.  If not, see <https://www.gnu.org/licenses/>.
 
 import bpy
+from math import (hypot)
 from mathutils import (Vector)
 
 
@@ -86,6 +87,20 @@ def calculate_max_height(context, data):
                     max_height = height
 
     return max_height
+
+
+def calculate_max_depth(context):
+    max_depth = 0
+
+    for obj in renderable_objects(context.view_layer.layer_collection):
+        for co in object_vertices(obj):
+            # Distance from (0, 0, 0)
+            depth = hypot(co.x, co.y, co.z)
+
+            if depth > max_depth:
+                max_depth = depth
+
+    return max_depth
 
 
 def antialias_on(context):

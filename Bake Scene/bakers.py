@@ -97,7 +97,11 @@ def bake_ao(data, context, settings):
         inputs = tree.nodes.new('NodeGroupInput')
 
         ao = tree.nodes.new('ShaderNodeAmbientOcclusion')
-        ao.samples = 128
+
+        if data.camera_mode == 'TOP':
+            ao.samples = 128
+        elif data.camera_mode == 'HDRI':
+            ao.samples = 16
 
         emission = tree.nodes.new('ShaderNodeEmission')
 
@@ -237,6 +241,39 @@ def bake_height(data, context, settings, max_height):
         node_group_output(tree, inputs, emission.outputs["Emission"])
 
         with ReplaceMaterials(context, "__Bake_Height"):
+            bpy.ops.render.render(write_still=True)
+
+
+def bake_depth(data, context, settings, max_depth):
+    default_settings(context)
+    antialias_on(context)
+
+    context.scene.render.filepath = filename(data, settings, "depth")
+    context.scene.render.image_settings.color_mode = 'BW'
+    render_engine(context, data)
+    view_transform_raw(context)
+    context.scene.world.color = (1.0, 1.0, 1.0)
+    context.scene.eevee.use_gtao = False
+    context.scene.eevee.use_overscan = False
+
+    with NodeGroup("__Bake_Depth") as tree:
+        inputs = tree.nodes.new('NodeGroupInput')
+        camera_data = tree.nodes.new('ShaderNodeCameraData')
+
+        map_range = tree.nodes.new('ShaderNodeMapRange')
+        map_range.inputs[1].default_value = 0.0
+        map_range.inputs[2].default_value = max_depth
+        map_range.inputs[3].default_value = 0.0
+        map_range.inputs[4].default_value = 1.0
+
+        emission = tree.nodes.new('ShaderNodeEmission')
+
+        tree.links.new(camera_data.outputs["View Distance"], map_range.inputs["Value"])
+        tree.links.new(map_range.outputs["Result"], emission.inputs["Color"])
+
+        node_group_output(tree, inputs, emission.outputs["Emission"])
+
+        with ReplaceMaterials(context, "__Bake_Depth"):
             bpy.ops.render.render(write_still=True)
 
 

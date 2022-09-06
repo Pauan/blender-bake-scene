@@ -18,6 +18,27 @@
 import bpy
 
 
+class TexturesScenePanel(bpy.types.Panel):
+    bl_idname = "DATA_PT_bake_scene_textures_scene"
+    bl_label = "Scene"
+    bl_space_type = 'PROPERTIES'
+    bl_region_type = 'WINDOW'
+    bl_context = 'output'
+    bl_parent_id = "DATA_PT_bake_scene_textures"
+    bl_order = 0
+    bl_options = set()
+
+    def draw(self, context):
+        data = context.scene.bake_scene
+        layout = self.layout
+
+        layout.use_property_split = True
+        flow = layout.grid_flow(row_major=True, columns=1, even_columns=True, even_rows=False, align=True)
+
+        col = flow.column()
+        col.prop(data, "generate_render")
+
+
 class TexturesGeometryPanel(bpy.types.Panel):
     bl_idname = "DATA_PT_bake_scene_textures_geometry"
     bl_label = "Geometry"
@@ -25,7 +46,7 @@ class TexturesGeometryPanel(bpy.types.Panel):
     bl_region_type = 'WINDOW'
     bl_context = 'output'
     bl_parent_id = "DATA_PT_bake_scene_textures"
-    bl_order = 0
+    bl_order = 1
     bl_options = set()
 
     def draw(self, context):
@@ -49,18 +70,33 @@ class TexturesGeometryPanel(bpy.types.Panel):
 
         flow.separator()
 
-        col = flow.column()
-        col.prop(data, "generate_height")
+        if data.camera_mode == 'TOP':
+            col = flow.column()
+            col.prop(data, "generate_height")
 
-        row = col.row()
-        row.enabled = data.generate_height
-        row.prop(data, "height_mode", expand=True)
-
-        if data.height_mode == 'MANUAL':
             row = col.row()
             row.enabled = data.generate_height
-            row.prop(data, "max_height")
-            row.operator("bake_scene.calculate_max_height", text="", icon='PIVOT_BOUNDBOX')
+            row.prop(data, "height_mode", expand=True)
+
+            if data.height_mode == 'MANUAL':
+                row = col.row()
+                row.enabled = data.generate_height
+                row.prop(data, "max_height")
+                row.operator("bake_scene.calculate_max_height", text="", icon='PIVOT_BOUNDBOX')
+
+        elif data.camera_mode == 'HDRI':
+            col = flow.column()
+            col.prop(data, "generate_depth")
+
+            row = col.row()
+            row.enabled = data.generate_depth
+            row.prop(data, "depth_mode", expand=True)
+
+            if data.depth_mode == 'MANUAL':
+                row = col.row()
+                row.enabled = data.generate_depth
+                row.prop(data, "max_depth")
+                row.operator("bake_scene.calculate_max_depth", text="", icon='PIVOT_BOUNDBOX')
 
 
 class TexturesMaterialPanel(bpy.types.Panel):
@@ -70,7 +106,7 @@ class TexturesMaterialPanel(bpy.types.Panel):
     bl_region_type = 'WINDOW'
     bl_context = 'output'
     bl_parent_id = "DATA_PT_bake_scene_textures"
-    bl_order = 1
+    bl_order = 2
     bl_options = set()
 
     def draw(self, context):
@@ -103,7 +139,7 @@ class TexturesMaskingPanel(bpy.types.Panel):
     bl_region_type = 'WINDOW'
     bl_context = 'output'
     bl_parent_id = "DATA_PT_bake_scene_textures"
-    bl_order = 2
+    bl_order = 3
     bl_options = set()
 
     def draw(self, context):
@@ -142,7 +178,7 @@ class TexturesHairPanel(bpy.types.Panel):
     bl_region_type = 'WINDOW'
     bl_context = 'output'
     bl_parent_id = "DATA_PT_bake_scene_textures"
-    bl_order = 3
+    bl_order = 4
     bl_options = set()
 
     def draw(self, context):
