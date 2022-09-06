@@ -132,16 +132,16 @@ def bake_curvature(data, context, settings):
         normalize = tree.nodes.new('ShaderNodeVectorMath')
         normalize.operation = 'NORMALIZE'
 
-        add = tree.nodes.new('ShaderNodeVectorMath')
-        add.inputs[1].default_value[0] = 0.5
-        add.inputs[1].default_value[1] = 0.5
-        add.inputs[1].default_value[2] = 0
+        transform = tree.nodes.new('ShaderNodeVectorTransform')
+        transform.vector_type = 'NORMAL'
+        transform.convert_from = 'WORLD'
+        transform.convert_to = 'CAMERA'
 
         emission = tree.nodes.new('ShaderNodeEmission')
 
         tree.links.new(inputs.outputs["Normal"], normalize.inputs["Vector"])
-        tree.links.new(normalize.outputs["Vector"], add.inputs[0])
-        tree.links.new(add.outputs["Vector"], emission.inputs["Color"])
+        tree.links.new(normalize.outputs["Vector"], transform.inputs["Vector"])
+        tree.links.new(transform.outputs["Vector"], emission.inputs["Color"])
 
         node_group_output(tree, inputs, emission.outputs["Emission"])
 
