@@ -89,10 +89,12 @@ def calculate_max_height(context, data):
 
 
 def antialias_on(context):
+    context.scene.cycles.samples = 32
     context.scene.display.render_aa = '32'
     context.scene.eevee.taa_render_samples = 128
 
 def antialias_off(context):
+    context.scene.cycles.samples = 1
     context.scene.display.render_aa = 'OFF'
     context.scene.eevee.taa_render_samples = 1
 
@@ -104,11 +106,20 @@ def view_transform_color(context):
     context.scene.view_settings.view_transform = 'Standard'
 
 
+def render_engine(context, data):
+    context.scene.render.engine = 'BLENDER_EEVEE'
+
+
 def default_settings(context):
     context.view_layer.use = True
     context.view_layer.use_pass_combined = True
     context.scene.use_nodes = False
     context.scene.world.use_nodes = False
+
+    context.scene.cycles.use_adaptive_sampling = False
+    context.scene.cycles.time_limit = 0
+    context.scene.cycles.use_denoising = False
+    context.scene.cycles.scrambling_distance = 0
 
     context.scene.eevee.use_bloom = False
     context.scene.eevee.use_ssr = False
@@ -475,6 +486,12 @@ class Settings:
 
         self.sequencer = scene.sequencer_colorspace_settings.name
 
+        self.cycle_sample = scene.cycles.samples
+        self.use_adaptive_sampling = scene.cycles.use_adaptive_sampling
+        self.time_limit = scene.cycles.time_limit
+        self.use_denoising = scene.cycles.use_denoising
+        self.scrambling_distance = scene.cycles.scrambling_distance
+
         self.taa_render_samples = scene.eevee.taa_render_samples
         self.use_gtao = scene.eevee.use_gtao
         self.use_bloom = scene.eevee.use_bloom
@@ -544,6 +561,12 @@ class Settings:
         scene.view_settings.use_curve_mapping = self.use_curve_mapping
 
         scene.sequencer_colorspace_settings.name = self.sequencer
+
+        scene.cycles.samples = self.cycle_sample
+        scene.cycles.use_adaptive_sampling = self.use_adaptive_sampling
+        scene.cycles.time_limit = self.time_limit
+        scene.cycles.use_denoising = self.use_denoising
+        scene.cycles.scrambling_distance = self.scrambling_distance
 
         scene.eevee.taa_render_samples = self.taa_render_samples
         scene.eevee.use_gtao = self.use_gtao

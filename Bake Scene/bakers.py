@@ -29,7 +29,7 @@ def bake_normal(data, context, settings):
 
     context.scene.render.filepath = filename(data, settings, "normal")
     context.scene.render.image_settings.color_mode = 'RGB'
-    context.scene.render.engine = 'BLENDER_EEVEE'
+    render_engine(context, data)
     view_transform_raw(context)
     context.scene.world.color = (0.5, 0.5, 1)
     context.scene.eevee.use_gtao = False
@@ -73,7 +73,7 @@ def bake_ao(data, context, settings):
 
     context.scene.render.filepath = filename(data, settings, "ao")
     context.scene.render.image_settings.color_mode = 'BW'
-    context.scene.render.engine = 'BLENDER_EEVEE'
+    render_engine(context, data)
     view_transform_raw(context)
     context.scene.world.color = (1, 1, 1)
 
@@ -108,7 +108,7 @@ def bake_curvature(data, context, settings):
 
     context.scene.render.filepath = filename(data, settings, "curvature")
     context.scene.render.image_settings.color_mode = 'BW'
-    context.scene.render.engine = 'BLENDER_EEVEE'
+    render_engine(context, data)
     view_transform_raw(context)
     context.scene.world.color = (0.5, 0.5, 1)
     context.scene.eevee.use_gtao = False
@@ -204,7 +204,7 @@ def bake_height(data, context, settings, max_height):
 
     context.scene.render.filepath = filename(data, settings, "height")
     context.scene.render.image_settings.color_mode = 'BW'
-    context.scene.render.engine = 'BLENDER_EEVEE'
+    render_engine(context, data)
     view_transform_raw(context)
     context.scene.world.color = (0.5, 0.5, 0.5)
     context.scene.eevee.use_gtao = False
@@ -237,7 +237,7 @@ def bake_color(data, context, settings):
 
     context.scene.render.filepath = filename(data, settings, "color")
     context.scene.render.image_settings.color_mode = 'RGB'
-    context.scene.render.engine = 'BLENDER_EEVEE'
+    render_engine(context, data)
     view_transform_color(context)
     context.scene.world.color = (0, 0, 0)
     context.scene.eevee.use_gtao = False
@@ -251,7 +251,7 @@ def bake_metallic(data, context, settings):
 
     context.scene.render.filepath = filename(data, settings, "metallic")
     context.scene.render.image_settings.color_mode = 'BW'
-    context.scene.render.engine = 'BLENDER_EEVEE'
+    render_engine(context, data)
     view_transform_raw(context)
     context.scene.world.color = (0, 0, 0)
     context.scene.eevee.use_gtao = False
@@ -265,7 +265,7 @@ def bake_roughness(data, context, settings):
 
     context.scene.render.filepath = filename(data, settings, "roughness")
     context.scene.render.image_settings.color_mode = 'BW'
-    context.scene.render.engine = 'BLENDER_EEVEE'
+    render_engine(context, data)
     view_transform_raw(context)
     context.scene.world.color = (0, 0, 0)
     context.scene.eevee.use_gtao = False
@@ -279,7 +279,7 @@ def bake_emission(data, context, settings):
 
     context.scene.render.filepath = filename(data, settings, "emission")
     context.scene.render.image_settings.color_mode = 'RGB'
-    context.scene.render.engine = 'BLENDER_EEVEE'
+    render_engine(context, data)
     view_transform_color(context)
     context.scene.world.color = (0, 0, 0)
     context.scene.eevee.use_gtao = False
@@ -294,7 +294,7 @@ def bake_vertex_color(data, context, settings):
 
     context.scene.render.filepath = filename(data, settings, "vertex_color")
     context.scene.render.image_settings.color_mode = 'RGB'
-    context.scene.render.engine = 'BLENDER_EEVEE'
+    render_engine(context, data)
     view_transform_color(context)
     context.scene.world.color = (0, 0, 0)
     context.scene.eevee.use_gtao = False
@@ -318,7 +318,7 @@ def bake_alpha(data, context, settings):
 
     context.scene.render.filepath = filename(data, settings, "alpha")
     context.scene.render.image_settings.color_mode = 'BW'
-    context.scene.render.engine = 'BLENDER_EEVEE'
+    render_engine(context, data)
     view_transform_raw(context)
     context.scene.world.color = (0, 0, 0)
     context.scene.eevee.use_gtao = False
@@ -339,7 +339,7 @@ def bake_material_index(data, context, settings):
 
     context.scene.render.filepath = filename(data, settings, "material_index")
     context.scene.render.image_settings.color_mode = 'BW'
-    context.scene.render.engine = 'BLENDER_EEVEE'
+    render_engine(context, data)
     view_transform_raw(context)
     context.scene.world.color = (0, 0, 0)
     context.scene.eevee.use_gtao = False
@@ -369,7 +369,7 @@ def bake_object_index(data, context, settings):
 
     context.scene.render.filepath = filename(data, settings, "object_index")
     context.scene.render.image_settings.color_mode = 'BW'
-    context.scene.render.engine = 'BLENDER_EEVEE'
+    render_engine(context, data)
     view_transform_raw(context)
     context.scene.world.color = (0, 0, 0)
     context.scene.eevee.use_gtao = False
@@ -399,7 +399,7 @@ def bake_hair_random(data, context, settings):
 
     context.scene.render.filepath = filename(data, settings, "hair_random")
     context.scene.render.image_settings.color_mode = 'BW'
-    context.scene.render.engine = 'BLENDER_EEVEE'
+    render_engine(context, data)
     view_transform_raw(context)
     context.scene.world.color = (0, 0, 0)
     context.scene.eevee.use_gtao = False
@@ -423,7 +423,7 @@ def bake_hair_root(data, context, settings):
 
     context.scene.render.filepath = filename(data, settings, "hair_root")
     context.scene.render.image_settings.color_mode = 'BW'
-    context.scene.render.engine = 'BLENDER_EEVEE'
+    render_engine(context, data)
     view_transform_raw(context)
     context.scene.world.color = (0, 0, 0)
     context.scene.eevee.use_gtao = False
@@ -447,7 +447,7 @@ def bake_object_random(data, context, settings):
 
     context.scene.render.filepath = filename(data, settings, "object_random")
     context.scene.render.image_settings.color_mode = 'BW'
-    context.scene.render.engine = 'BLENDER_EEVEE'
+    render_engine(context, data)
     view_transform_raw(context)
     context.scene.world.color = (0, 0, 0)
     context.scene.eevee.use_gtao = False
