@@ -30,13 +30,13 @@ class Scene(bpy.types.PropertyGroup):
     height_bounds: PointerProperty(type=bpy.types.Object)
 
     camera_mode: EnumProperty(
-        name="Camera",
-        description="Camera mode for baking",
+        name="Type",
+        description="Type of baking",
         default='TOP',
         update=update_noop,
         options=set(),
-        items=(('TOP', "Top-down", ""),
-               ('HDRI', "HDRI", ""))
+        items=(('TOP', "Flat", "Bakes the scene as an orthographic rectangle. Can be used to create trimsheets, decals, or hair cards"),
+               ('HDRI', "HDRI", "Bakes the entire scene as an equirectangular HDRI"))
     )
 
     camera_height: FloatProperty(
