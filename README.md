@@ -5,8 +5,9 @@ This add-on bakes your scene to textures. This is useful in many situations:
 * Creating trim sheets
 * Creating decals
 * Creating hair cards
-* Creating skyboxes
 * Creating terrain
+* Creating skyboxes
+* Creating HDRIs
 
 The textures are baked super fast, they are anti-aliased, and they are extremely high quality.
 
@@ -42,6 +43,13 @@ The textures are baked super fast, they are anti-aliased, and they are extremely
 
    ![][screenshot3]
 
+4. If you want to bake an HDRI or skybox, change the `Type` to `HDRI`. You should also enable the `Render` option in the `Textures` panel:
+
+   ![][screenshot10]
+
+   You must change the renderer to `Cycles`, save the textures as `OpenEXR` or `RadianceHDR`, and the image height must be half the size of the width (e.g. `4096 x 2048`):
+
+   ![][screenshot11]
 
 ## Tips and advice
 
@@ -81,6 +89,8 @@ The textures are baked super fast, they are anti-aliased, and they are extremely
 
 
 ## Texture Information
+
+* `Render` bakes a texture which is the same as `Render Image (F12)`. This is useful for creating HDRIs, skyboxes, or billboards.
 
 * `Alpha` bakes a black-and-white alpha / opacity / transparency texture.
 
@@ -147,6 +157,8 @@ The textures are baked super fast, they are anti-aliased, and they are extremely
 [screenshot7]: https://github.com/Pauan/blender-bake-scene/raw/master/Screenshot%207.png
 [screenshot8]: https://github.com/Pauan/blender-bake-scene/raw/master/Screenshot%208.png
 [screenshot9]: https://github.com/Pauan/blender-bake-scene/raw/master/Screenshot%209.png
+[screenshot10]: https://github.com/Pauan/blender-bake-scene/raw/master/Screenshot%2010.png
+[screenshot11]: https://github.com/Pauan/blender-bake-scene/raw/master/Screenshot%2011.png
 
 
 ## For programmers
