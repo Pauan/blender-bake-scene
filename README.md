@@ -114,6 +114,10 @@ The textures are baked super fast, they are anti-aliased, and they are extremely
    By default it calculates the max bounds automatically based on the vertexes in your scene. But you can instead choose `Manual` mode and
    then manually change the max bounds.
 
+* `Depth` bakes a depth map. Black means right in front of the camera, white means far away from the camera.
+
+   By default it calculates the max distance automatically based on the vertexes in your scene. But you can instead choose Manual mode and then manually change the max distance.
+
 * `Color` bakes the `Base Color` socket of the `Principled BSDF` node.
 
 * `Emission` bakes the `Emission` socket of the `Principled BSDF` node.
@@ -145,7 +149,7 @@ The textures are baked super fast, they are anti-aliased, and they are extremely
 
 * `Hair Random` bakes a black-and-white texture where every particle hair strand is given a random grayscale color.
 
-* `Hair Root` bakes a black-and-white texture where black means the root of the hair, and white means the tip of the hair.
+* `Hair Root` bakes a black-and-white texture where black is the root of the hair, and white is the tip of the hair.
 
 
 [screenshot1]: https://github.com/Pauan/blender-bake-scene/raw/master/Screenshot%201.png
