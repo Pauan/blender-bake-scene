@@ -63,10 +63,13 @@ class TexturesGeometryPanel(bpy.types.Panel):
         col.prop(data, "generate_ao")
 
         col = flow.column()
-        col.prop(data, "generate_curvature")
+        col.prop(data, "generate_normal")
+
+        flow.separator()
 
         col = flow.column()
-        col.prop(data, "generate_normal")
+        col.prop(data, "generate_curvature")
+        col.prop(data, "curvature_contrast")
 
         flow.separator()
 

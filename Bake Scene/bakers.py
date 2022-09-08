@@ -29,6 +29,36 @@ def bake_render(data, context, settings):
     bpy.ops.render.render(write_still=True)
 
 
+def normal_node_group(tree):
+    inputs = tree.nodes.new('NodeGroupInput')
+
+    normalize = tree.nodes.new('ShaderNodeVectorMath')
+    normalize.operation = 'NORMALIZE'
+
+    transform = tree.nodes.new('ShaderNodeVectorTransform')
+    transform.vector_type = 'NORMAL'
+    transform.convert_from = 'WORLD'
+    transform.convert_to = 'CAMERA'
+
+    math = tree.nodes.new('ShaderNodeVectorMath')
+    math.operation = 'MULTIPLY_ADD'
+    math.inputs[1].default_value[0] = 0.5
+    math.inputs[1].default_value[1] = 0.5
+    math.inputs[1].default_value[2] = -0.5
+    math.inputs[2].default_value[0] = 0.5
+    math.inputs[2].default_value[1] = 0.5
+    math.inputs[2].default_value[2] = 0.5
+
+    emission = tree.nodes.new('ShaderNodeEmission')
+
+    tree.links.new(inputs.outputs["Normal"], normalize.inputs["Vector"])
+    tree.links.new(normalize.outputs["Vector"], transform.inputs["Vector"])
+    tree.links.new(transform.outputs["Vector"], math.inputs["Vector"])
+    tree.links.new(math.outputs["Vector"], emission.inputs["Color"])
+
+    node_group_output(tree, inputs, emission.outputs["Emission"])
+
+
 def bake_normal(data, context, settings):
     default_settings(context)
     antialias_on(context)
@@ -42,33 +72,7 @@ def bake_normal(data, context, settings):
     context.scene.eevee.use_overscan = False
 
     with NodeGroup("__Bake_Normal") as tree:
-        inputs = tree.nodes.new('NodeGroupInput')
-
-        normalize = tree.nodes.new('ShaderNodeVectorMath')
-        normalize.operation = 'NORMALIZE'
-
-        transform = tree.nodes.new('ShaderNodeVectorTransform')
-        transform.vector_type = 'NORMAL'
-        transform.convert_from = 'WORLD'
-        transform.convert_to = 'CAMERA'
-
-        math = tree.nodes.new('ShaderNodeVectorMath')
-        math.operation = 'MULTIPLY_ADD'
-        math.inputs[1].default_value[0] = 0.5
-        math.inputs[1].default_value[1] = 0.5
-        math.inputs[1].default_value[2] = -0.5
-        math.inputs[2].default_value[0] = 0.5
-        math.inputs[2].default_value[1] = 0.5
-        math.inputs[2].default_value[2] = 0.5
-
-        emission = tree.nodes.new('ShaderNodeEmission')
-
-        tree.links.new(inputs.outputs["Normal"], normalize.inputs["Vector"])
-        tree.links.new(normalize.outputs["Vector"], transform.inputs["Vector"])
-        tree.links.new(transform.outputs["Vector"], math.inputs["Vector"])
-        tree.links.new(math.outputs["Vector"], emission.inputs["Color"])
-
-        node_group_output(tree, inputs, emission.outputs["Emission"])
+        normal_node_group(tree)
 
         with ReplaceMaterials(context, "__Bake_Normal"):
             bpy.ops.render.render(write_still=True)
@@ -127,23 +131,7 @@ def bake_curvature(data, context, settings):
     context.scene.eevee.use_overscan = False
 
     with NodeGroup("__Bake_Curvature") as tree:
-        inputs = tree.nodes.new('NodeGroupInput')
-
-        normalize = tree.nodes.new('ShaderNodeVectorMath')
-        normalize.operation = 'NORMALIZE'
-
-        transform = tree.nodes.new('ShaderNodeVectorTransform')
-        transform.vector_type = 'NORMAL'
-        transform.convert_from = 'WORLD'
-        transform.convert_to = 'CAMERA'
-
-        emission = tree.nodes.new('ShaderNodeEmission')
-
-        tree.links.new(inputs.outputs["Normal"], normalize.inputs["Vector"])
-        tree.links.new(normalize.outputs["Vector"], transform.inputs["Vector"])
-        tree.links.new(transform.outputs["Vector"], emission.inputs["Color"])
-
-        node_group_output(tree, inputs, emission.outputs["Emission"])
+        normal_node_group(tree)
 
         with ReplaceMaterials(context, "__Bake_Curvature"):
             with CompositorNodeGroup(context.scene, "__Composite_Curvature") as tree:
@@ -183,6 +171,10 @@ def bake_curvature(data, context, settings):
                 combine = tree.nodes.new('CompositorNodeMath')
                 combine.operation = 'ADD'
 
+                multiply = tree.nodes.new('CompositorNodeMath')
+                multiply.operation = 'MULTIPLY'
+                multiply.inputs[1].default_value = data.curvature_contrast
+
                 normalize = tree.nodes.new('CompositorNodeMath')
                 normalize.operation = 'SUBTRACT'
                 normalize.use_clamp = True
@@ -205,7 +197,8 @@ def bake_curvature(data, context, settings):
                 tree.links.new(y_sub_sep.outputs["G"], y_diff.inputs[1])
                 tree.links.new(x_diff.outputs["Value"], combine.inputs[0])
                 tree.links.new(y_diff.outputs["Value"], combine.inputs[1])
-                tree.links.new(combine.outputs["Value"], normalize.inputs[1])
+                tree.links.new(combine.outputs["Value"], multiply.inputs[0])
+                tree.links.new(multiply.outputs["Value"], normalize.inputs[1])
                 tree.links.new(normalize.outputs["Value"], outputs.inputs["Image"])
 
                 bpy.ops.render.render(write_still=True)

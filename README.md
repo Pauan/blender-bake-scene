@@ -105,6 +105,8 @@ The textures are baked super fast, they are anti-aliased, and they are extremely
 
    This is often used to add extra detail to the edges of models (scratches, scuffs, or dirt).
 
+   The `Contrast` setting controls how strong the black / white colors are.
+
 * `Normal` bakes a normal map. This is affected by the `Normal` socket of the `Principled BSDF` node.
 
 * `Height` bakes a height map. Gray means the geometry is at the center `0z`, white means positive `+z`, and black means negative `-z`.

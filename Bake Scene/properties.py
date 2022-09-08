@@ -116,6 +116,18 @@ class Scene(bpy.types.PropertyGroup):
         update=update_noop,
     )
 
+    curvature_contrast: FloatProperty(
+        name="Contrast",
+        description="Controls the amount of contrast in the curvature map",
+        default=1,
+        min=0,
+        step=1,
+        precision=5,
+        subtype='UNSIGNED',
+        unit='NONE',
+        options=set(),
+    )
+
     generate_render: BoolProperty(
         name="Render",
         description="Generate final render texture for scene",
