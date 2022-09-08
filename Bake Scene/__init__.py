@@ -20,7 +20,7 @@
 bl_info = {
     "name": "Bake Scene",
     "author": "Pauan",
-    "version": (1, 2),
+    "version": (1, 3),
     "blender": (2, 80, 0),
     "location": "Output Settings > Bake Scene",
     "description": "Bakes your entire scene into textures",
